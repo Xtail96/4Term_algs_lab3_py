@@ -54,21 +54,26 @@ def main():
             beginOrigin, endOrigin = input().split(" ")
             beginOrigin = int(beginOrigin)
             endOrigin = int(endOrigin)
+            if beginOrigin > endOrigin:
+                    parser.exit(1, "Левая граница отрезка должна быть меньше правой")
             overlay = Seg(beginOrigin, endOrigin)
             print("Число участков разбиения: ", end='')
             t = int(input())
+            if t < 0:
+                parser.exit(1, "Число отрезков разбиения должно быть неотрицательным")
+
             print("Введите участки разбиения в формате [начало, конец]")
             segments = set()
             while t > 0:
                 first, second = input().split(" ")
                 first = int(first)
                 second = int(second)
+                if first > second:
+                    parser.exit(1, "Левая граница отрезка должна быть меньше правой")
                 segments.add(Seg(first, second))
                 t -= 1
         except ValueError:
             parser.exit(1, "Не удалось прочитать входные данные")
-    if t < 0 or beginOrigin < 1 or endOrigin < 1:
-        parser.exit(1, "Входные данные должны быть натуральными числами, число этожей должно быть больше одного")
     global verbose
     verbose = args.v
     print("Поиск решения:")
