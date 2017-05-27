@@ -34,12 +34,51 @@ def solve(segments, overlay, current, best):
 
 
 def main():
-    segments = {
-        Seg(1, 4),
-        Seg(4, 9),
-        Seg(5, 12)
-    }
-    overlay = Seg(3, 11)
+    from argparse import ArgumentParser, FileType
+    parser = ArgumentParser()
+    parser.add_argument("-f", type=FileType('r'), help="считать входные данные из файла F в формате \"{транзисторы} {этажи}\"")
+    parser.add_argument("-c", help="считать входные данные из консоли", action='store_true')
+    parser.add_argument("-v", help="выводить ход решения", action='store_true')
+    args = parser.parse_args()
+    #if bool(args.f) + bool(args.c) / 2 != 1:
+    #    parser.print_help()
+    #    parser.exit(1)
+    if args.f:
+        try:
+            t, s = map(int, args.f.read().split()[:2])
+        except ValueError:
+            parser.exit(1, "Не удалось прочитать входные данные")
+    elif args.c:
+        try:
+            print("Отрезок: ", end='')
+            beginOrigin, endOrigin = input().split(" ")
+            beginOrigin = int(beginOrigin)
+            endOrigin = int(endOrigin)
+            overlay = Seg(beginOrigin, endOrigin)
+            print("Число участков разбиения: ", end='')
+            t = int(input())
+            print("Введите участки разбиения в формате [начало, конец]")
+            segments = set()
+            while t > 0:
+                first, second = input().split(" ")
+                first = int(first)
+                second = int(second)
+                segments.add(Seg(first, second))
+                t -= 1
+        except ValueError:
+            parser.exit(1, "Не удалось прочитать входные данные")
+    if t < 0 or beginOrigin < 1 or endOrigin < 1:
+        parser.exit(1, "Входные данные должны быть натуральными числами, число этожей должно быть больше одного")
+    global verbose
+    verbose = args.v
+    print("Поиск решения:")
+
+    #segments = {
+    #    Seg(1, 4),
+    #    Seg(4, 9),
+    #    Seg(5, 12)
+    #}
+    #overlay = Seg(3, 11)
     # 1234
     #    456789
     #     56789...
