@@ -36,7 +36,7 @@ def solve(segments, overlay, current, best):
 def main():
     from argparse import ArgumentParser, FileType
     parser = ArgumentParser()
-    parser.add_argument("-f", type=FileType('r'), help="считать входные данные из файла F в формате \"{транзисторы} {этажи}\"")
+    parser.add_argument("-f", type=FileType('r'), help="считать входные данные из файла F")
     parser.add_argument("-c", help="считать входные данные из консоли", action='store_true')
     parser.add_argument("-v", help="выводить ход решения", action='store_true')
     args = parser.parse_args()
@@ -64,14 +64,14 @@ def main():
 
             print("Введите участки разбиения в формате [начало, конец]")
             segments = set()
-            while t > 0:
+            for i in range(t):
                 first, second = input().split(" ")
                 first = int(first)
                 second = int(second)
                 if first > second:
                     parser.exit(1, "Левая граница отрезка должна быть меньше правой")
                 segments.add(Seg(first, second))
-                t -= 1
+                #t -= 1
         except ValueError:
             parser.exit(1, "Не удалось прочитать входные данные")
     global verbose
