@@ -45,7 +45,31 @@ def main():
     #    parser.exit(1)
     if args.f:
         try:
-            t, s = map(int, args.f.read().split()[:2])
+            #t, s = map(int, args.f.read().split()[:2])
+            beginOrigin, endOrigin = args.f.readline().split(" ")
+            beginOrigin = int(beginOrigin)
+            endOrigin = int(endOrigin)
+            if beginOrigin > endOrigin:
+                    parser.exit(1, "Левая граница отрезка должна быть меньше либо равна правой")
+            overlay = Seg(beginOrigin, endOrigin)
+            print("Исходный отрезок: [" + str(beginOrigin) + "; " + str(endOrigin) + "]")
+
+            count = args.f.readline()
+            count = int(count)
+            if count < 0:
+                parser.exit(1, "Число отрезков разбиения должно быть неотрицательным")
+            print(count)
+            
+            segments = set()
+            for i in range(count):
+                first, second = args.f.readline().split(" ")
+                first = int(first)
+                second = int(second)
+                if first > second:
+                    parser.exit(1, "Левая граница отрезка должна быть меньше либо равна правой")
+                segments.add(Seg(first, second))
+            print(segments)
+
         except ValueError:
             parser.exit(1, "Не удалось прочитать входные данные")
     elif args.c:
@@ -55,7 +79,7 @@ def main():
             beginOrigin = int(beginOrigin)
             endOrigin = int(endOrigin)
             if beginOrigin > endOrigin:
-                    parser.exit(1, "Левая граница отрезка должна быть меньше правой")
+                parser.exit(1, "Левая граница отрезка должна быть меньше либо равна правой")
             overlay = Seg(beginOrigin, endOrigin)
             print("Число участков разбиения: ", end='')
             t = int(input())
@@ -69,9 +93,8 @@ def main():
                 first = int(first)
                 second = int(second)
                 if first > second:
-                    parser.exit(1, "Левая граница отрезка должна быть меньше правой")
+                    parser.exit(1, "Левая граница отрезка должна быть меньше либо равна правой")
                 segments.add(Seg(first, second))
-                #t -= 1
         except ValueError:
             parser.exit(1, "Не удалось прочитать входные данные")
     global verbose
