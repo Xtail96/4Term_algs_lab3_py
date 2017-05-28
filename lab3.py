@@ -12,8 +12,8 @@ def seg_filter(segments, overlay):
     def cond(seg):
         return seg.x <= overlay.x <= seg.y
     if verbose :
-    	print("Набор отрезков, на которых лежит левая граница исходного промежутка:")
-    	print(set(filter(cond, segments)))
+    	print(" " * level, "Набор отрезков, на которых лежит левая граница исходного промежутка:", set(filter(cond, segments)))
+    	#print()
     return set(filter(cond, segments))
 
 
@@ -32,9 +32,10 @@ def solve(segments, overlay, current, best):
 				global level
 				level += 1
 				if verbose:
-					print(" " * level, "Найден лучшая сумма: ", best)
-		if verbose:
-			print(" " * level, "Лучшая сумма осталась прежней: ", best)
+					print(" " * level, "Найдено более хорошее решение: ", best)
+			elif verbose:
+				print(" " * level, "Решение осталось прежним: ", best)
+				level -= 1	
 		return best
 	elif verbose:
 		print(" " * level, "Сумма равна: ", inf_sol)
