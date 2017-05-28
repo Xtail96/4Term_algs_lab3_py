@@ -46,7 +46,7 @@ def solve(segments, overlay, current, best):
 		level -= 2	
 		return best
 	elif verbose:
-		print(" " * level, "Сумма равна: ", inf_sol)
+		print(" " * level, "Не смогли покрыть отрезок: ", inf_sol)
 		return inf_sol
 	else:
 		return inf_sol
