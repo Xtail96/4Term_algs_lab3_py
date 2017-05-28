@@ -14,19 +14,25 @@ def seg_filter(segments, overlay):
     if verbose :
     	print(" " * level, "Набор отрезков, покрывающих исходный:", set(filter(cond, segments)))
     	#print()
-    return filter(cond, segments)
+    return set(filter(cond, segments))
 
 
 def solve(segments, overlay, current, best):
 	global level
 	level += 1
 	if overlay.x > overlay.y:
+		if verbose:
+			print(" " * level, "Дошли до листа; Текущая комбнация = ", current)
+		level -= 1
 		return current
 	if current.sum >= best.sum:
+		level -= 1
 		return inf_sol
 	segs = seg_filter(segments, overlay)
 	if segs:
 		for s in segs:
+			if verbose:
+				print(" " * level, "Просматриваемый отрезок: ", s)
 			l = s.y - s.x + 1
 			p = solve(segments, Seg(s.y + 1, overlay.y), Sol(current.sum + l, current.path | {s}), best)
 			if p.sum < best.sum:
@@ -35,7 +41,7 @@ def solve(segments, overlay, current, best):
 					print(" " * level, "Найдено более хорошее решение: ", best)
 			elif verbose:
 				print(" " * level, "Решение осталось прежним: ", best)
-				level -= 1	
+		level -= 1	
 		return best
 	elif verbose:
 		print(" " * level, "Сумма равна: ", inf_sol)
