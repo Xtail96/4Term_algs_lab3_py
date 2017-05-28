@@ -34,7 +34,7 @@ def solve(segments, overlay, current, best):
 	if segs:
 		for s in segs:
 			if verbose:
-				print(" " * level, "Просматриваемый отрезок: ", s)
+				print(" " * level, "Просматриваемая ветвь: ", s)
 			l = s.y - s.x + 1
 			p = solve(segments, Seg(s.y + 1, overlay.y), Sol(current.sum + l, current.path | {s}), best)
 			if p.sum < best.sum:
