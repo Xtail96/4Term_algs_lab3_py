@@ -6,31 +6,41 @@ Sol = namedtuple("Sol", ('sum', 'path'))
 inf_sol = Sol(inf, [])
 zero_sol = Sol(0, [])
 
+level = 0
+
 def seg_filter(segments, overlay):
     def cond(seg):
         return seg.x <= overlay.x <= seg.y
+    if verbose :
+    	print("Набор отрезков, на которых лежит левая граница исходного промежутка:")
+    	print(set(filter(cond, segments)))
     return set(filter(cond, segments))
 
 
 def solve(segments, overlay, current, best):
-    if overlay.x > overlay.y:
-        return current
-    if current.sum >= best.sum:
-        return inf_sol
-    segs = seg_filter(segments, overlay)
-    if segs:
-        for s in segs:
-            l = s.y - s.x + 1
-            p = solve(segments,
-                      Seg(s.y + 1, overlay.y),
-                      Sol(current.sum + l, current.path + [s]),
-                      best
-                      )
-            if p.sum < best.sum:
-                best = p
-        return best
-    else:
-        return inf_sol
+	if overlay.x > overlay.y:
+		return current
+	if current.sum >= best.sum:
+		return inf_sol
+	segs = seg_filter(segments, overlay)
+	if segs:
+		for s in segs:
+			l = s.y - s.x + 1
+			p = solve(segments, Seg(s.y + 1, overlay.y), Sol(current.sum + l, current.path + [s]), best)
+			if p.sum < best.sum:
+				best = p
+				global level
+				level += 1
+				if verbose:
+					print(" " * level, "Найден лучшая сумма: ", best)
+		if verbose:
+			print(" " * level, "Лучшая сумма осталась прежней: ", best)
+		return best
+	elif verbose:
+		print(" " * level, "Сумма равна: ", inf_sol)
+		return inf_sol
+	else:
+		return inf_sol
 
 
 def main():
