@@ -59,7 +59,7 @@ def main():
     parser.add_argument("-c", help="считать входные данные из консоли", action='store_true')
     parser.add_argument("-v", help="выводить ход решения", action='store_true')
     args = parser.parse_args()
-    if bool(args.f) + bool(args.c) / 2 == 0:
+    if bool(args.f) == bool(args.c):
         parser.print_help()
         parser.exit(1)
     if args.f:
