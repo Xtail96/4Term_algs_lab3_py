@@ -3,8 +3,8 @@ from math import inf
 
 Seg = namedtuple("Seg", ('x', 'y'))
 Sol = namedtuple("Sol", ('sum', 'path'))
-inf_sol = Sol(inf, [])
-zero_sol = Sol(0, [])
+inf_sol = Sol(inf, set())
+zero_sol = Sol(0, set())
 
 level = 0
 
@@ -12,12 +12,14 @@ def seg_filter(segments, overlay):
     def cond(seg):
         return seg.x <= overlay.x <= seg.y
     if verbose :
-    	print(" " * level, "Набор отрезков, на которых лежит левая граница исходного промежутка:", set(filter(cond, segments)))
+    	print(" " * level, "Набор отрезков, покрывающих исходный:", set(filter(cond, segments)))
     	#print()
-    return set(filter(cond, segments))
+    return filter(cond, segments)
 
 
 def solve(segments, overlay, current, best):
+	global level
+	level += 1
 	if overlay.x > overlay.y:
 		return current
 	if current.sum >= best.sum:
@@ -26,11 +28,9 @@ def solve(segments, overlay, current, best):
 	if segs:
 		for s in segs:
 			l = s.y - s.x + 1
-			p = solve(segments, Seg(s.y + 1, overlay.y), Sol(current.sum + l, current.path + [s]), best)
+			p = solve(segments, Seg(s.y + 1, overlay.y), Sol(current.sum + l, current.path | {s}), best)
 			if p.sum < best.sum:
 				best = p
-				global level
-				level += 1
 				if verbose:
 					print(" " * level, "Найдено более хорошее решение: ", best)
 			elif verbose:
