@@ -10,43 +10,43 @@ level = 0
 
 def seg_filter(segments, overlay):
     def cond(seg):
-        return seg.x <= overlay.x <= seg.y
+        return seg.x <= overlay.x < seg.y
     if verbose :
-    	print(" " * level, "Набор отрезков, для покрытия исходного:", set(filter(cond, segments)))
+    	print("| " * level, "Набор отрезков, для покрытия исходного:", set(filter(cond, segments)))
     	#print()
     return set(filter(cond, segments))
 
 
 def solve(segments, overlay, current, best):
 	global level
-	level += 2
+	level += 1
 	if overlay.x >= overlay.y:
 		if verbose:
-			print(" " * level, "Дошли до листа; Текущая комбнация = ", current)
-		level -= 2
+			print("| " * level, "Дошли до листа; Текущая комбнация = ", current)
+		level -= 1
 		return current
 	if current.sum >= best.sum:
 		if verbose:
-			print(" " * level, "Сумма отрезков больше лучшей из найденных", current)
-		level -= 2
+			print("| " * level, "Сумма отрезков больше лучшей из найденных", current)
+		level -= 1
 		return inf_sol
 	segs = seg_filter(segments, overlay)
 	if segs:
 		for s in segs:
 			if verbose:
-				print(" " * level, "Просматриваемая ветвь: ", s)
+				print("| " * level, "Просматриваемая ветвь: ", s)
 			l = s.y - s.x
 			p = solve(segments, Seg(s.y, overlay.y), Sol(current.sum + l, current.path | {s}), best)
 			if p.sum < best.sum:
 				best = p
 				if verbose:
-					print(" " * level, "Найдено более хорошее решение: ", best)
+					print("| " * level, "Найдено более хорошее решение: ", best)
 			elif verbose:
-				print(" " * level, "Решение осталось прежним: ", best)
-		level -= 2	
+				print("| " * level, "Решение осталось прежним: ", best)
+		level -= 1	
 		return best
 	elif verbose:
-		print(" " * level, "Не смогли покрыть отрезок: ", inf_sol)
+		print("| " * level, "Не смогли покрыть отрезок: ", inf_sol)
 		return inf_sol
 	else:
 		return inf_sol
